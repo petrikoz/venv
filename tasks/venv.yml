@@ -1,0 +1,39 @@
+---
+# Install and setup VirtualEnvWrapper
+
+- name: Install VenvWrapper
+  sudo: yes
+  pip: name=virtualenvwrapper
+
+- name: Setup VenvWrapper for user
+  sudo: yes
+  sudo_user: '{{ venv_user }}'
+  lineinfile: dest={{ venv_user_config }} line='{{ item }}' create=yes
+  with_items:
+    - 'export WORKON_HOME="{{ venv_workon_home }}"'
+    - '[ -f {{ venv_wrapper }} ] && source {{ venv_wrapper }}'
+  when:
+    - venv_user is defined
+    - venv_user_config is defined
+    - venv_wrapper is defined
+    - venv_workon_home is defined
+
+- stat: path={{ venv_project_dir }}
+  register: proj_dir
+  when: venv_project_dir is defined
+
+- set_fact: venv_dir={{ venv_workon_home }}/{{ venv_name }}
+  when:
+    - venv_workon_home is defined
+    - venv_name is defined
+
+- name: Setup venv
+  sudo: yes
+  sudo_user: '{{ venv_user }}'
+  shell: virtualenv {{ venv_dir }} -p {{ venv_python }}
+  args:
+    creates: '{{ venv_dir }}'
+  when:
+    - venv_user is defined
+    - venv_dir is defined
+    - venv_python is defined

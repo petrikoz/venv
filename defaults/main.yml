@@ -1,0 +1,12 @@
+---
+venv_enable: true
+
+venv_wrapper: '/usr/local/bin/virtualenvwrapper.sh'
+venv_python: python
+
+venv_workon_home: '/var/www/.venvs'
+venv_user: '{{ deploy_user }}'
+venv_user_config: '~/.bashrc'
+
+venv_project_dir: '{{ deploy_src_dir }}'
+venv_name: '{{ deploy_app_name }}'
