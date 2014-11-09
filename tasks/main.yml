@@ -1,0 +1,4 @@
+---
+- include: venv.yml
+  tags: [virtualenv]
+  when: venv_enable
