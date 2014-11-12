@@ -8,7 +8,7 @@
 - name: Setup VenvWrapper for user
   sudo: yes
   sudo_user: '{{ venv_user }}'
-  lineinfile: dest={{ venv_user_config }} line='{{ item }}' create=yes
+  lineinfile: dest={{ venv_user_config }} line={{ item }} create=yes
   with_items:
     - 'export WORKON_HOME="{{ venv_workon_home }}"'
     - '[ -f {{ venv_wrapper }} ] && source {{ venv_wrapper }}'
@@ -17,10 +17,6 @@
     - venv_user_config is defined
     - venv_wrapper is defined
     - venv_workon_home is defined
-
-- stat: path={{ venv_project_dir }}
-  register: proj_dir
-  when: venv_project_dir is defined
 
 - set_fact: venv_dir={{ venv_workon_home }}/{{ venv_name }}
   when:
